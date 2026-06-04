@@ -1,8 +1,9 @@
-## Gramática EBNF de PhysKin
+## Gramática EBNF de PhysKin 
 
 ### Notación
-- Los terminales (tokens) van entre comillas dobles: `"particula"`
-- Los no terminales se escriben sin comillas: `declaracion_particula`
+
+- Los **terminales** (tokens) van entre comillas dobles: `"particula"`
+- Los **no terminales** se escriben sin comillas: `declaracion_particula`
 
 ### Gramática
 
@@ -22,9 +23,9 @@ instruccion = declaracion_particula
 bloque = "{" , { instruccion } , "}" ;
 
 declaracion_particula = "particula", ID,
-                        "posicion", "=", NUM,
-                        "velocidad", "=", NUM,
-                        [ "aceleracion", "=", NUM ],
+                        "posicion", "=", numero_real,
+                        "velocidad", "=", numero_real,
+                        [ "aceleracion", "=", numero_real ],
                         ";" ;
 
 declaracion_numero = "numero", ID, [ "=", expr ], ";" ;
@@ -32,23 +33,26 @@ declaracion_numero = "numero", ID, [ "=", expr ], ";" ;
 asignacion = ID, "=", expr, ";" ;
 
 consulta = "imprimir", ( consulta_posicion | consulta_velocidad ), ";" ;
-consulta_posicion = "posicion", "(", ID, ")", "en", NUM ;
-consulta_velocidad = "velocidad", "(", ID, ")", "en", NUM ;
+consulta_posicion = "posicion", "(", ID, ")", "en", numero_real ;
+consulta_velocidad = "velocidad", "(", ID, ")", "en", numero_real ;
 
 imprimir_cadena = "imprimir", STRING, ";" ;
 
+if_stmt    = "if",    "(", expr, ")", bloque, [ "else", bloque ] ;
+while_stmt = "while", "(", expr, ")", bloque ;
+for_stmt   = "for",   "(", ID, "=", expr, ";", expr, ";", ID, "=", expr, ")", bloque ;
 
-if_stmt = "if", "(", expr, ")", instruccion, [ "else", instruccion ] ;
-while_stmt = "while", "(", expr, ")", instruccion ;
-for_stmt = "for", "(", ID, "=", expr, ";", expr, ";", ID, "=", expr, ")", instruccion ;
+numero_real = ["-"], NUM ;
 
 expr = comparacion ;
-comparacion = suma { ("<" | ">" | "<=" | ">=" | "==" | "!=") suma } ;
-suma = termino { ("+" | "-") termino } ;
-termino = factor { ("*" | "/") factor } ;
-factor = NUM | ID | STRING | "(", expr, ")" | "-", factor ;
+comparacion = suma , { ("<" | ">" | "<=" | ">=" | "==" | "!=") , suma } ;
+suma = termino , { ("+" | "-") , termino } ;
+termino = factor , { ("*" | "/") , factor } ;
+factor = NUM | ID | "(", expr, ")" | "-", factor ;
 
-
-ID = letra (letra | digito | "_")* ;
-NUM = ["-"], digito+, [".", digito+] ;
-STRING = '"' , { carácter - '"' | escape } , '"' ;
+(* Terminales (definidos en el analizador léxico) *)
+ID = (letra | "_") , (letra | digito | "_")* ;
+NUM = digito+ , [ "." , digito+ ] ;
+STRING = '"' , { caracter_valido } , '"' ;
+caracter_valido = "\\" , ("n" | "t" | '"' | "\\")
+                | ( carácter - ('"' | "\\") ) ;
