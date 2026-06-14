@@ -96,6 +96,7 @@ class For(NodoAST):
     var_ini: str
     expr_ini: NodoAST
     condicion: NodoAST
+    var_paso: str
     expr_paso: NodoAST
     cuerpo: Bloque
     linea: int
