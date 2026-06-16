@@ -264,6 +264,10 @@ def p_error(p):
         display(t) for t in acciones
         if t not in ('error', '$end') })
 
+    # Evita mostrar '-' solo, lo integra al número para mayor claridad
+    if set(esperados) == {"'-'", 'un número'}:
+        esperados = ['un número']
+
     if esperados:
         print(
             f"Error sintáctico [línea {p.lineno}, columna {col}]: "
