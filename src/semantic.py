@@ -57,7 +57,6 @@ class SemanticAnalyzer:
     def __init__(self):
         self.symbols = SymbolTable()
         self.errors = []
-        self._in_time_context = False
 
     def _error(self, linea, col, msg):
         self.errors.append(f"Error semántico [línea {linea}, columna {col}]: {msg}")
@@ -115,7 +114,7 @@ class SemanticAnalyzer:
     def _analyze_particle_decl(self, node):
         # Teniendo en cuenta no redeclarar partículas
         if self.symbols.lookup(node.nombre) is not None:
-            self._error(node.linea, node.col,f"partícula '{node.nombre}' ya declarada")
+            self._error(node.linea, node.col, f"'{node.nombre}' ya está declarado")
             return
 
         # posición y velocidad obligatorias
@@ -173,9 +172,7 @@ class SemanticAnalyzer:
             return
 
         # Verificar que el tiempo sea ≥ 0
-        self._in_time_context = True
         self._process(time_node)
-        self._in_time_context = False
 
         if time_node.valor < 0:
             self._error(time_node.linea, time_node.col, f"el tiempo debe ser ≥ 0, se recibió {time_node.valor}")
@@ -213,10 +210,9 @@ class SemanticAnalyzer:
 
         # tres expresiones del for
         self._process(node.expr_ini)
+        self.symbols.mark_initialized(node.var_ini)
         self._process(node.condicion)
         self._process(node.expr_paso)
-
-        self.symbols.mark_initialized(node.var_ini)
 
         # cuerpo se procesa en su propio ámbito (el nodo Bloque ya lo maneja)
         self._process(node.cuerpo)
