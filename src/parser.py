@@ -279,4 +279,4 @@ def p_error(p):
             f"token inesperado {encontrado}")
 
 # Construccion del parser
-parser = yacc.yacc()
+parser = yacc.yacc(errorlog=yacc.NullLogger())
