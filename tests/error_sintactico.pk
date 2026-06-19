@@ -1,0 +1,3 @@
+// Error sintactico: se esperaba un número (tiempo) después de 'en', se encontró ';'
+particula p1 posicion=0 velocidad=10;
+imprimir posicion(p1) en ;
