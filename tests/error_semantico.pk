@@ -1,0 +1,9 @@
+// Error 1: tiempo negativo (regla del dominio)
+particula p1 posicion=0 velocidad=-10 aceleracion=2;
+imprimir posicion(p1) en -5;
+
+// Error 2: particula no declarada
+imprimir velocidad(p2) en 3;
+
+// Error 3: redeclaracion de particula
+particula p1 posicion=50 velocidad=0;
