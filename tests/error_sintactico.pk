@@ -1,3 +1,6 @@
-// Error sintactico: se esperaba un número (tiempo) después de 'en', se encontró ';'
+// Error 1: falta el valor del tiempo despues de 'en'
 particula p1 posicion=0 velocidad=10;
 imprimir posicion(p1) en ;
+
+// Error 2: falta el cuerpo del imprimir
+imprimir ;
