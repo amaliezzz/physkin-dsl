@@ -1,0 +1,41 @@
+// Programa valido
+
+/* Declaraciones de particulas */
+particula p1 posicion=0 velocidad=10 aceleracion=2;
+particula p2 posicion=100 velocidad=-5;
+
+/* Declaraciones de numeros */
+numero t = 5;
+numero resultado;
+
+/* Asignacion */
+resultado = t * 2;
+
+/* Consultas */
+imprimir "Resultados cinematicos";
+imprimir posicion(p1) en 5;
+imprimir velocidad(p1) en 5;
+imprimir posicion(p2) en 10;
+
+/* if sin else */
+if (t > 0) {
+    imprimir "El tiempo es positivo";
+}
+
+/* if con else */
+if (resultado > 5) {
+    imprimir "resultado mayor que 5";
+} else {
+    imprimir "resultado menor o igual a 5";
+}
+
+/* while */
+numero i = 0;
+while (i < 3) {
+    i = i + 1;
+}
+
+/* for */
+for (i = 0; i < 5; i = i + 1) {
+    imprimir "fin de iteracion";
+}
