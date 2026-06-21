@@ -1,6 +1,6 @@
 from ast_nodes import (
     Programa, Bloque, DeclaracionParticula, DeclaracionNumero,
-    Asignacion, ConsultaPosicion, ConsultaVelocidad, ImprimirConsulta,
+    Asignacion, ConsultaPosicion, ConsultaVelocidad, ConsultaColision, ImprimirConsulta,
     ImprimirCadena, If, While, For, BinOp, UnaryOp, Numero,
     Identificador, NodoError
 )
@@ -84,6 +84,7 @@ class SemanticAnalyzer:
             Asignacion: self._analyze_assignment,
             ConsultaPosicion: self._analyze_position_query,
             ConsultaVelocidad: self._analyze_velocity_query,
+            ConsultaColision: self._analyze_collision_query,
             ImprimirConsulta: self._analyze_print_query,
             ImprimirCadena: self._analyze_print_string,
             If: self._analyze_if,
@@ -160,6 +161,14 @@ class SemanticAnalyzer:
 
     def _analyze_velocity_query(self, node):
         self._check_particle_and_time(node.particula, node.tiempo, node.linea, node.col)
+
+    def _analyze_collision_query(self, node):
+        for nombre in (node.particula1, node.particula2):
+            info = self.symbols.lookup(nombre)
+            if info is None:
+                self._error(node.linea, node.col, f"partícula '{nombre}' no declarada")
+            elif info['tipo'] != 'particula':
+                self._error(node.linea, node.col, f"'{nombre}' no es una partícula")
 
     def _check_particle_and_time(self, name, time_node, line, col):
         """para consultas de posición y velocidad"""

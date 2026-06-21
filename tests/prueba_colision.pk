@@ -1,0 +1,9 @@
+// Dos partículas que sí colisionan
+particula p1 posicion=0 velocidad=10 aceleracion=0;
+particula p2 posicion=100 velocidad=-10 aceleracion=0;
+imprimir colision(p1, p2);
+
+// Dos partículas que nunca colisionan
+particula p3 posicion=0 velocidad=5 aceleracion=0;
+particula p4 posicion=100 velocidad=10 aceleracion=20;
+imprimir colision(p3, p4);

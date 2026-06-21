@@ -35,6 +35,7 @@ asignacion = ID, "=", expr, ";" ;
 consulta = "imprimir", ( consulta_posicion | consulta_velocidad ), ";" ;
 consulta_posicion = "posicion", "(", ID, ")", "en", numero_real ;
 consulta_velocidad = "velocidad", "(", ID, ")", "en", numero_real ;
+consulta_colision  = "colision",  "(", ID, ",", ID, ")" ;
 
 imprimir_cadena = "imprimir", STRING, ";" ;
 

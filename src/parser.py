@@ -4,8 +4,8 @@ import sys
 import re
 from ast_nodes import (
     Programa, Bloque, DeclaracionParticula, DeclaracionNumero,
-    Asignacion, ConsultaPosicion, ConsultaVelocidad, ImprimirConsulta,
-    ImprimirCadena, If, While, For, BinOp, UnaryOp, Numero,
+    Asignacion, ConsultaPosicion, ConsultaVelocidad, ConsultaColision,
+    ImprimirConsulta, ImprimirCadena, If, While, For, BinOp, UnaryOp, Numero,
     Identificador, NodoError
 )
 
@@ -118,6 +118,11 @@ def p_consulta_velocidad(p):
     col = token_column(p.slice[1])
     p[0] = ConsultaVelocidad(p[3], p[6], linea, col)
 
+def p_consulta_colision(p):
+    'consulta : IMPRIMIR COLISION PAREN_IZQ ID COMA ID PAREN_DER PUNTOCOMA'
+    linea = token_line(p.slice[1])
+    col = token_column(p.slice[1])
+    p[0] = ConsultaColision(p[4], p[6], linea, col)
 
 def p_imprimir_cadena(p):
     'imprimir_cadena : IMPRIMIR STRING PUNTOCOMA'

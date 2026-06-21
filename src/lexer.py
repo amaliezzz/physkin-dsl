@@ -36,6 +36,7 @@ reserved = {
     'aceleracion': 'ACELERACION',
     'en': 'EN',
     'imprimir': 'IMPRIMIR',
+    'colision': 'COLISION',
     # Variables numéricas
     'numero': 'NUMERO',
     # Estructuras de control

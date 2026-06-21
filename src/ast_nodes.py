@@ -60,6 +60,14 @@ class ConsultaVelocidad(NodoAST):
     col: int
 
 @dataclass
+class ConsultaColision(NodoAST):
+    """consulta_colision = "colision", "(", ID, ",", ID, ")" ;"""
+    particula1: str
+    particula2: str
+    linea: int
+    col: int
+
+@dataclass
 class ImprimirConsulta(NodoAST):
     """consulta = "imprimir", (consulta_posicion | consulta_velocidad), ";"; """
     consulta: Union[ConsultaPosicion, ConsultaVelocidad]
