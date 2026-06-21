@@ -2,7 +2,7 @@ import math
 from ast_nodes import (
     Programa, DeclaracionParticula,
     ImprimirConsulta, ImprimirCadena,
-    ConsultaPosicion, ConsultaVelocidad, ConsultaColision
+    ConsultaPosicion, ConsultaVelocidad, ConsultaColision, Vector2D
 )
 
 class Evaluator:
@@ -15,10 +15,16 @@ class Evaluator:
 
     def _exec(self, node):
         if isinstance(node, DeclaracionParticula):
-            a = node.aceleracion.valor if node.aceleracion is not None else 0
-            self.particles[node.nombre] = {
-                'x0': node.posicion.valor, 'v0': node.velocidad.valor, 'a':  a,
-            }
+            def val(nodo):
+                return (nodo.x, nodo.y) if isinstance(nodo, Vector2D) else nodo.valor
+
+            x0 = val(node.posicion)
+            v0 = val(node.velocidad)
+            if node.aceleracion is not None:
+                a = val(node.aceleracion)
+            else:
+                a = (0, 0) if isinstance(x0, tuple) else 0
+            self.particles[node.nombre] = {'x0': x0, 'v0': v0, 'a': a}
 
         elif isinstance(node, ImprimirConsulta):
             self._eval_query(node.consulta)
@@ -39,22 +45,33 @@ class Evaluator:
         v0 = p['v0']
         a = p['a']
 
-        es_mru = (a == 0)
-        mov = "MRU" if es_mru else "MRUA"
+        es_2d = isinstance(x0, tuple)
 
-        if isinstance(consulta, ConsultaPosicion):
-            if es_mru:
-                pos = x0 + v0 * t
-            else:
-                pos = x0 + v0 * t + 0.5 * a * t ** 2
-            print(f"[{mov}] posicion({consulta.particula}) en t={t}s: {pos:.2f} m")
+        if es_2d:
+            es_mru = (a[0] == 0 and a[1] == 0)
+            mov = "MRU" if es_mru else "MRUA"
 
-        elif isinstance(consulta, ConsultaVelocidad):
-            if es_mru:
-                vel = v0
-            else:
-                vel = v0 + a * t
-            print(f"[{mov}] velocidad({consulta.particula}) en t={t}s: {vel:.2f} m/s")
+            if isinstance(consulta, ConsultaPosicion):
+                px = x0[0] + v0[0] * t + 0.5 * a[0] * t ** 2
+                py = x0[1] + v0[1] * t + 0.5 * a[1] * t ** 2
+                print(f"[{mov}] posicion({consulta.particula}) en t={t}s: ({px:.2f}, {py:.2f}) m")
+
+            elif isinstance(consulta, ConsultaVelocidad):
+                vx = v0[0] + a[0] * t
+                vy = v0[1] + a[1] * t
+                print(f"[{mov}] velocidad({consulta.particula}) en t={t}s: ({vx:.2f}, {vy:.2f}) m/s")
+
+        else:
+            es_mru = (a == 0)
+            mov = "MRU" if es_mru else "MRUA"
+
+            if isinstance(consulta, ConsultaPosicion):
+                pos = x0 + v0 * t if es_mru else x0 + v0 * t + 0.5 * a * t ** 2
+                print(f"[{mov}] posicion({consulta.particula}) en t={t}s: {pos:.2f} m")
+
+            elif isinstance(consulta, ConsultaVelocidad):
+                vel = v0 if es_mru else v0 + a * t
+                print(f"[{mov}] velocidad({consulta.particula}) en t={t}s: {vel:.2f} m/s")
 
     def _eval_colision(self, node):
         p1 = self.particles.get(node.particula1)

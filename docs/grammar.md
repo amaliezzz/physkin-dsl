@@ -23,9 +23,9 @@ instruccion = declaracion_particula
 bloque = "{" , { instruccion } , "}" ;
 
 declaracion_particula = "particula", ID,
-                        "posicion", "=", numero_real,
-                        "velocidad", "=", numero_real,
-                        [ "aceleracion", "=", numero_real ],
+                        "posicion", "=", valor_cinematico,
+                        "velocidad", "=", valor_cinematico,
+                        [ "aceleracion", "=", valor_cinematico ],
                         ";" ;
 
 declaracion_numero = "numero", ID, [ "=", expr ], ";" ;
@@ -42,6 +42,10 @@ imprimir_cadena = "imprimir", STRING, ";" ;
 if_stmt    = "if",    "(", expr, ")", bloque, [ "else", bloque ] ;
 while_stmt = "while", "(", expr, ")", bloque ;
 for_stmt   = "for",   "(", ID, "=", expr, ";", expr, ";", ID, "=", expr, ")", bloque ;
+
+(* valor escalar (1D) o vector (2D) para posicion, velocidad y aceleracion *)
+valor_cinematico = numero_real
+                 | "(", numero_real, ",", numero_real, ")" ;
 
 numero_real = ["-"], NUM ;
 

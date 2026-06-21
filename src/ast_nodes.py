@@ -135,6 +135,14 @@ class Numero(NodoAST):
     col: int
 
 @dataclass
+class Vector2D(NodoAST):
+    """valor_cinematico 2D: "(", numero_real, ",", numero_real, ")" """
+    x: Union[int, float]
+    y: Union[int, float]
+    linea: int
+    col: int
+
+@dataclass
 class Identificador(NodoAST):
     nombre: str
     linea: int

@@ -6,7 +6,7 @@ from ast_nodes import (
     Programa, Bloque, DeclaracionParticula, DeclaracionNumero,
     Asignacion, ConsultaPosicion, ConsultaVelocidad, ConsultaColision,
     ImprimirConsulta, ImprimirCadena, If, While, For, BinOp, UnaryOp, Numero,
-    Identificador, NodoError
+    Vector2D, Identificador, NodoError
 )
 
 precedence = (
@@ -64,17 +64,17 @@ def p_bloque(p):
 
 
 def p_declaracion_particula_con_acel(p):
-    '''declaracion_particula : PARTICULA ID POSICION ASIGN numero_real \
-                               VELOCIDAD ASIGN numero_real \
-                               ACELERACION ASIGN numero_real PUNTOCOMA'''
+    '''declaracion_particula : PARTICULA ID POSICION ASIGN valor_cinematico \
+                               VELOCIDAD ASIGN valor_cinematico \
+                               ACELERACION ASIGN valor_cinematico PUNTOCOMA'''
     linea = token_line(p.slice[1])
     col = token_column(p.slice[1])
     p[0] = DeclaracionParticula(p[2], p[5], p[8], p[11], linea, col)
 
 
 def p_declaracion_particula_sin_acel(p):
-    '''declaracion_particula : PARTICULA ID POSICION ASIGN numero_real \
-                               VELOCIDAD ASIGN numero_real PUNTOCOMA'''
+    '''declaracion_particula : PARTICULA ID POSICION ASIGN valor_cinematico \
+                               VELOCIDAD ASIGN valor_cinematico PUNTOCOMA'''
     linea = token_line(p.slice[1])
     col   = token_column(p.slice[1])
     p[0]  = DeclaracionParticula(p[2], p[5], p[8], None, linea, col)
@@ -155,6 +155,16 @@ def p_for(p):
     linea = token_line(p.slice[1])
     col = token_column(p.slice[1])
     p[0] = For(p[3], p[5], p[7], p[9], p[11], p[13], linea, col)
+
+def p_valor_cinematico_escalar(p):
+    'valor_cinematico : numero_real'
+    p[0] = p[1]
+
+def p_valor_cinematico_vector(p):
+    'valor_cinematico : PAREN_IZQ numero_real COMA numero_real PAREN_DER'
+    linea = token_line(p.slice[1])
+    col = token_column(p.slice[1])
+    p[0] = Vector2D(p[2].valor, p[4].valor, linea, col)
 
 # numero_real = ["-"], NUM
 def p_numero_real_positivo(p):

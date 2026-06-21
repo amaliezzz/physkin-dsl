@@ -1,7 +1,7 @@
 from ast_nodes import (
     Programa, Bloque, DeclaracionParticula, DeclaracionNumero,
     Asignacion, ConsultaPosicion, ConsultaVelocidad, ConsultaColision, ImprimirConsulta,
-    ImprimirCadena, If, While, For, BinOp, UnaryOp, Numero,
+    ImprimirCadena, If, While, For, BinOp, UnaryOp, Numero, Vector2D,
     Identificador, NodoError
 )
 
@@ -93,6 +93,7 @@ class SemanticAnalyzer:
             BinOp: self._analyze_binop,
             UnaryOp: self._analyze_unaryop,
             Numero: self._analyze_number,
+            Vector2D: self._analyze_vector2d,
             Identificador: self._analyze_identifier,
         }
         handler = handlers.get(type(node))
@@ -121,6 +122,17 @@ class SemanticAnalyzer:
         # posición y velocidad obligatorias
         if node.posicion is None or node.velocidad is None:
             self._error(node.linea, node.col,"falta 'posicion' o 'velocidad' en la declaración")
+            return
+
+        # posicion, velocidad y aceleracion deben ser todas 1D o todas 2D
+        es_2d = isinstance(node.posicion, Vector2D)
+        if isinstance(node.velocidad, Vector2D) != es_2d:
+            self._error(node.linea, node.col,
+                        "posicion y velocidad deben ser ambas 1D o ambas 2D")
+            return
+        if node.aceleracion is not None and isinstance(node.aceleracion, Vector2D) != es_2d:
+            self._error(node.linea, node.col,
+                        "aceleracion debe ser del mismo tipo que posicion y velocidad")
             return
 
         # Declaramos la partícula y la marcamos como inicializada
@@ -236,6 +248,9 @@ class SemanticAnalyzer:
 
     def _analyze_number(self, node):
         pass
+
+    def _analyze_vector2d(self, node):
+        pass  # literal 2D, nada que validar
 
     def _analyze_identifier(self, node):
         info = self.symbols.lookup(node.nombre)

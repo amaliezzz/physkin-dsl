@@ -1,0 +1,9 @@
+// Particula con movimiento 2D (proyectil)
+particula p1 posicion=(0, 0) velocidad=(3, 10) aceleracion=(0, -9.8);
+
+// Particula 1D
+particula p2 posicion=100 velocidad=-5 aceleracion=0;
+
+imprimir posicion(p1) en 2;
+imprimir velocidad(p1) en 2;
+imprimir posicion(p2) en 2;
