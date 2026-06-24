@@ -1,0 +1,2 @@
+// Error: colisión entre partículas que no existen
+colision(p1, p2);
