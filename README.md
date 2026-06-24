@@ -37,7 +37,8 @@ pip install ply==3.11
 
 El punto de entrada es `src/main.py`. Recibe como argumento el archivo .pk a analizar.
 ```bash
-python src/main.py tests/programa_valido.pk
+python src/main.py tests/prueba_valida.pk
+.pk
 ```
 El analizador ejecuta las fases en orden: léxico → sintáctico → semántico.
 Si todas las fases son correctas, el programa termina sin salida (comportamiento esperado de un compilador).
@@ -62,12 +63,12 @@ Error semántico  [línea 10, columna 1]: el tiempo debe ser ≥ 0, se recibió 
 
 | Archivo | Qué contiene |
 |---|---|
-| `tests/programa_valido.pk` | Programa correcto en las tres fases |
+| `tests/prueba_valida.pk` | Programa correcto en las tres fases |
 | `tests/error_sintactico.pk` | Errores sintácticos aislados |
 | `tests/error_semantico.pk` | Errores semánticos con sintaxis correcta |
 
 ```bash
-python src/main.py tests/programa_valido.pk
+python src/main.py tests/prueba_valida.pk
 python src/main.py tests/error_sintactico.pk
 python src/main.py tests/error_semantico.pk
 ```
@@ -76,7 +77,7 @@ python src/main.py tests/error_semantico.pk
 
 El flag `--eval` activa el evaluador. Solo tiene efecto si el programa es válido en las tres fases. Calcula y muestra la posición o velocidad de cada partícula usando las fórmulas de MRU y MRUA.
 ```bash
-python src/main.py tests/programa_valido.pk --eval
+python src/main.py tests/prueba_valida.pk --eval
 ```
 ```
 [MRUA] posicion(p1) en t=5s: 75.00 m
