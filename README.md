@@ -1,4 +1,4 @@
-# PhysKin DSL — Extensiones opcionales
+## PhysKin DSL — Extensiones opcionales
 
 Esta rama (`extension-2d-colision`) parte de `main` e implementa las dos
 extensiones opcionales del proyecto: detección de colisión entre partículas
@@ -8,15 +8,15 @@ Los programas 1D existentes funcionan sin ningún cambio.
 
 ---
 
-## Detección de colisión
+### Detección de colisión
 
-### Sintaxis
+#### Sintaxis
 
 ```
 imprimir colision(p1, p2);
 ```
 
-### Descripción
+#### Descripción
 
 Calcula en qué instante dos partículas ocupan la misma posición. Partiendo
 de las ecuaciones de movimiento de cada una:
@@ -37,7 +37,7 @@ Igualando `x₁(t) = x₂(t)` y reorganizando se obtiene:
   cero, una o dos soluciones reales.
 - Solo se reportan soluciones con `t ≥ 0`.
 
-### Ejemplo
+#### Ejemplo
 
 ```physkin
 // Se encuentran en x = 50 m
@@ -51,7 +51,7 @@ particula p4 posicion=100 velocidad=10 aceleracion=20;
 imprimir colision(p3, p4);
 ```
 
-### Ejecución
+#### Ejecución
 
 ```bash
 python src/main.py tests/prueba_colision.pk --eval
@@ -64,17 +64,36 @@ Salida esperada:
 [COLISION] p3 y p4 nunca colisionan
 ```
 
+#### Error
+
+```physkin
+// Error: colisión entre partículas que no existen
+imprimir colision(p1, p2);
+```
+
+#### Ejecución
+```bash
+python src/main.py tests/error_colision.pk 
+```
+
+Salida esperada:
+
+```
+Error semántico [línea 2, columna 1]: partícula 'p1' no  declarada                                                                                                                   
+Error semántico [línea 2, columna 1]: partícula 'p2' no declarada
+```
+
 ---
 
-## Movimiento 2D
+### Movimiento 2D
 
-### Sintaxis
+#### Sintaxis
 
 ```
 particula p posicion=(x, y) velocidad=(vx, vy) aceleracion=(ax, ay);
 ```
 
-### Descripción
+#### Descripción
 
 Extiende la declaración de partículas para aceptar vectores `(x, y)` en
 lugar de escalares. Cada componente se evalúa de forma independiente con
@@ -103,12 +122,12 @@ ambas componentes:
 [MRUA] velocidad(p) en t=2s: (3.00, -9.60) m/s
 ```
 
-### Regla semántica
+#### Regla semántica
 
 Posición, velocidad y aceleración deben ser todas del mismo tipo: o todas
 escalares (1D) o todas vectores (2D). Mezclarlas es un error semántico.
 
-### Ejemplo
+#### Ejemplo
 
 ```physkin
 // Proyectil: velocidad horizontal constante, gravedad en y
@@ -122,7 +141,7 @@ imprimir velocidad(p1) en 2;
 imprimir posicion(p2) en 2;
 ```
 
-### Ejecución
+#### Ejecución
 
 ```bash
 python src/main.py tests/prueba_2d.pk --eval
@@ -134,4 +153,24 @@ Salida esperada:
 [MRUA] posicion(p1) en t=2s: (6.00, 0.40) m
 [MRUA] velocidad(p1) en t=2s: (3.00, -9.60) m/s
 [MRU] posicion(p2) en t=2s: 90.00 m
+```
+
+#### Error
+
+```physkin
+// Error: mezcla de coordenadas 1D y 2D
+particula p1 posicion=(3, 4) velocidad=5;
+particula p2 posicion=(4, 8) velocidad= (-3, 20) aceleracion = 5;
+```
+
+#### Ejecución
+```bash
+python src/main.py tests/error_2d.pk 
+```
+
+Salida esperada:
+
+```
+Error semántico [línea 2, columna 1]: posicion y velocidad deben ser ambas 1D o ambas 2D
+Error semántico [línea 3, columna 1]: aceleracion debe ser del mismo tipo que posicion y velocidad
 ```
