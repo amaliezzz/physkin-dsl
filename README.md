@@ -38,7 +38,7 @@ pip install ply==3.11
 El punto de entrada es `src/main.py`. Recibe como argumento el archivo .pk a analizar.
 ```bash
 python src/main.py tests/prueba_valida.pk
-.pk
+
 ```
 El analizador ejecuta las fases en orden: léxico → sintáctico → semántico.
 Si todas las fases son correctas, el programa termina sin salida (comportamiento esperado de un compilador).
