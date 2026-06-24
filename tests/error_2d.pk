@@ -1,0 +1,3 @@
+// Error: mezcla de coordenadas 1D y 2D
+particula p1 posicion=(3, 4) velocidad=5;
+particula p2 posicion=(4, 8) velocidad= (-3, 20) aceleracion = 5;
